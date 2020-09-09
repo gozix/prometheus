@@ -1,0 +1,9 @@
+.idea
+.vscode
+.DS_Store
+vendor/
+Gopkg.lock
+Gopkg.toml
+*.out
+*.test
+*.out
