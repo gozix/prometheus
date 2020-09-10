@@ -9,14 +9,16 @@ import (
 const DefRegistryName = "prometheus.component.registry"
 
 // DefRegistry is a prometheus registry definition getter.
-func DefRegistry() di.Def {
+func DefRegistry(registry *prometheus.Registry) di.Def {
 	return di.Def{
 		Name: DefRegistryName,
 		Build: func(ctn di.Container) (interface{}, error) {
-			var registry = prometheus.NewRegistry()
+			if registry == nil {
+				registry = prometheus.NewRegistry()
 
-			registry.MustRegister(prometheus.NewGoCollector())
-			registry.MustRegister(prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}))
+				registry.MustRegister(prometheus.NewGoCollector())
+				registry.MustRegister(prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}))
+			}
 
 			return registry, nil
 		},
