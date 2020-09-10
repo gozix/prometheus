@@ -9,7 +9,7 @@ import (
 // DefFlagsName is a definition name.
 const DefFlagsName = "prometheus.component.flags"
 
-// portFlag is a value of metrics-port flag
+// portFlag is a value of mprometheus-port flag
 var portFlagValue string
 
 // DefFlags is a custom flags definition getter.
@@ -21,7 +21,7 @@ func DefFlags() di.Def {
 		}},
 		Build: func(ctn di.Container) (interface{}, error) {
 			var fs = pflag.FlagSet{}
-			fs.StringVar(&portFlagValue, "metrics-port", "", "prometheus metrics port")
+			fs.StringVar(&portFlagValue, "prometheus-port", "", "prometheus metrics port")
 
 			return &fs, nil
 		},

@@ -20,5 +20,5 @@
 ## Flags
 
 ```
---metrics-port - Prometheus metrics port. The same `prometheus.port` config, but with high priority.
+--prometheus-port - Prometheus metrics port. The same `prometheus.port` config, but with high priority.
 ```
