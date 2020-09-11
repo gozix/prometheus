@@ -3,6 +3,7 @@ package prometheus
 import (
 	gzviper "github.com/gozix/viper/v2"
 	gzzap "github.com/gozix/zap/v2"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sarulabs/di/v2"
 
 	"github.com/gozix/prometheus/internal/component"
@@ -14,12 +15,35 @@ const BundleName = "prometheus"
 // DefRegistryName is a internal registry definition name
 var DefRegistryName = component.DefRegistryName
 
-// Bundle implements the glue.Bundle interface.
-type Bundle struct{}
+type (
+	// Bundle implements the glue.Bundle interface.
+	Bundle struct {
+		registry *prometheus.Registry
+	}
+
+	// Option interface.
+	Option interface {
+		apply(b *Bundle)
+	}
+
+	// optionFunc wraps a func so it satisfies the Option interface.
+	optionFunc func(b *Bundle)
+)
+
+// Registry option makes it possible to set a custom registry.
+func Registry(registry *prometheus.Registry) Option {
+	return optionFunc(func(b *Bundle) {
+		b.registry = registry
+	})
+}
 
 // NewBundle create bundle instance.
-func NewBundle() *Bundle {
-	return new(Bundle)
+func NewBundle(options ...Option) *Bundle {
+	var b = new(Bundle)
+	for _, option := range options {
+		option.apply(b)
+	}
+	return b
 }
 
 // Name is key implements the glue.Bundle interface.
@@ -30,7 +54,7 @@ func (b *Bundle) Name() string {
 // Build implements the glue.Bundle interface.
 func (b *Bundle) Build(builder *di.Builder) error {
 	return builder.Add(
-		component.DefRegistry(),
+		component.DefRegistry(b.registry),
 		component.DefFlags(),
 		component.DefServer(),
 	)
@@ -42,4 +66,9 @@ func (b *Bundle) DependsOn() []string {
 		gzzap.BundleName,
 		gzviper.BundleName,
 	}
+}
+
+// apply implements Option.
+func (f optionFunc) apply(bundle *Bundle) {
+	f(bundle)
 }
