@@ -30,11 +30,11 @@ func DefRegistry(registry *prometheus.Registry) di.Def {
 			for name, def := range ctn.Definitions() {
 				for _, tag := range def.Tags {
 					if tag.Name == promBundle.TagCollectorProvider {
-						var cs prometheus.Collector
+						var cs []prometheus.Collector
 						if err = ctn.Fill(name, &cs); err != nil {
 							return nil, err
 						}
-						collectors = append(collectors, cs)
+						collectors = append(collectors, cs...)
 					}
 				}
 			}
