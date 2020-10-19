@@ -1,7 +1,6 @@
 package prometheus
 
 import (
-	gzsql "github.com/gozix/sql/v2"
 	gzviper "github.com/gozix/viper/v2"
 	gzzap "github.com/gozix/zap/v2"
 	"github.com/prometheus/client_golang/prometheus"
@@ -70,7 +69,6 @@ func (b *Bundle) DependsOn() []string {
 	return []string{
 		gzzap.BundleName,
 		gzviper.BundleName,
-		gzsql.BundleName,
 	}
 }
 
