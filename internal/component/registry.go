@@ -3,12 +3,14 @@ package component
 import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sarulabs/di/v2"
-
-	promBundle "github.com/gozix/prometheus"
 )
 
-// DefRegistryName is a definition name.
-const DefRegistryName = "prometheus.component.registry"
+const (
+	// DefRegistryName is a definition name.
+	DefRegistryName = "prometheus.component.registry"
+	// TagCollectorProvider indicates defs with prom collectors
+	TagCollectorProvider = "prometheus.collector"
+)
 
 // DefRegistry is a prometheus registry definition getter.
 func DefRegistry(registry *prometheus.Registry) di.Def {
@@ -29,7 +31,7 @@ func DefRegistry(registry *prometheus.Registry) di.Def {
 			var err error
 			for name, def := range ctn.Definitions() {
 				for _, tag := range def.Tags {
-					if tag.Name == promBundle.TagCollectorProvider {
+					if tag.Name == TagCollectorProvider {
 						var cs []prometheus.Collector
 						if err = ctn.Fill(name, &cs); err != nil {
 							return nil, err

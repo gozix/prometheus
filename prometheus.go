@@ -11,8 +11,9 @@ import (
 
 const (
 	// BundleName is default definition name.
-	BundleName           = "prometheus"
-	TagCollectorProvider = "prometheus.collector"
+	BundleName = "prometheus"
+	// // TagCollectorProvider is alias of component.TagCollectorProvider.
+	TagCollectorProvider = component.TagCollectorProvider
 )
 
 // DefRegistryName is a internal registry definition name
