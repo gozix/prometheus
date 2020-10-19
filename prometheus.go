@@ -9,8 +9,11 @@ import (
 	"github.com/gozix/prometheus/internal/component"
 )
 
-// BundleName is default definition name.
-const BundleName = "prometheus"
+const (
+	// BundleName is default definition name.
+	BundleName           = "prometheus"
+	TagCollectorProvider = "prometheus.collector"
+)
 
 // DefRegistryName is a internal registry definition name
 var DefRegistryName = component.DefRegistryName
