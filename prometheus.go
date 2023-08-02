@@ -121,13 +121,24 @@ func (b *Bundle) providePreRunner(
 	logger *zap.Logger,
 	registry *prometheus.Registry,
 ) (_ glue.PreRunner, _ func() error, err error) {
+	// use this hack for UnmarshalKey
+	// see https://github.com/spf13/viper/issues/188
+	var configPath = BundleName
+	var cfgPath = cfg.Sub(configPath)
+	if cfgPath != nil {
+		for _, key := range cfg.Sub(configPath).AllKeys() {
+			key = configPath + "." + key
+			cfg.Set(key, cfg.Get(key))
+		}
+	}
+
 	var conf = struct {
 		Host string `mapstructure:"host"`
 		Port string `mapstructure:"port"`
 		Path string `mapstructure:"path"`
 	}{}
 
-	if err = cfg.UnmarshalKey(BundleName, &conf); err != nil {
+	if err = cfg.UnmarshalKey(configPath, &conf); err != nil {
 		return nil, nil, err
 	}
 
